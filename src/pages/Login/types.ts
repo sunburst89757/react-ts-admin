@@ -1,3 +1,4 @@
-export interface Itype {
-  name: string;
+export interface userType {
+  username: string;
+  password: string;
 }
