@@ -6,10 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import zhCN from "antd/lib/locale/zh_CN";
 import { ConfigProvider } from "antd";
-
+import { login } from "./api/test";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+login({
+  username: "test",
+  password: "123456"
+}).then((res) => {
+  console.log(res, "响应值");
+});
 root.render(
   <React.StrictMode>
     <BrowserRouter>

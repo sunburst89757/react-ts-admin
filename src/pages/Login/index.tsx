@@ -1,26 +1,17 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useState } from "react";
 import style from "./Login.module.scss";
 import { userType } from "./types";
 export function Login() {
   const onFinish = () => {};
   const onFinishFailed = () => {};
-  const [user, setUser] = useState<userType>({
-    username: "",
-    password: ""
-  });
-  const changeUserName = (username: string) => {
-    setUser({
-      username,
-      password: user.password
-    });
+  const [form] = Form.useForm<userType>();
+  const handleClick = () => {
+    console.log(form.getFieldValue("username"));
   };
-  const changePassword = (password: string) => {
-    setUser({
-      username: user.username,
-      password
-    });
+  const changeValue = (val: string, val2: userType) => {
+    console.log(val);
+    console.log(val2);
   };
   return (
     <div className={style.loginContainer}>
@@ -31,6 +22,7 @@ export function Login() {
           <div className={style.formTitle}>用户登录</div>
           <Form
             className={style.form}
+            form={form}
             name="basic"
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
@@ -38,6 +30,7 @@ export function Login() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            onValuesChange={changeValue}
           >
             <Form.Item
               label="用户名"
@@ -47,10 +40,6 @@ export function Login() {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
-                value={user.username}
-                onChange={(e) => {
-                  changeUserName(e.target.value);
-                }}
               />
             </Form.Item>
 
@@ -63,10 +52,6 @@ export function Login() {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
-                value={user.password}
-                onChange={(e) => {
-                  changePassword(e.target.value);
-                }}
               />
             </Form.Item>
 
@@ -79,7 +64,7 @@ export function Login() {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" onClick={handleClick}>
                 登录
               </Button>
             </Form.Item>
