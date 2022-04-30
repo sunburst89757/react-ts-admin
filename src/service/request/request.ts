@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { RequestConfig } from "./types";
+import { RequestConfig } from "../types";
 export class MyRequest {
   service: AxiosInstance;
   constructor(config: RequestConfig) {
@@ -35,7 +35,27 @@ export class MyRequest {
       config.interceptors?.responseErr
     );
   }
-  request(config: RequestConfig) {
-    return this.service.request(config);
+  request<T>(config: RequestConfig): Promise<T> {
+    // 这个return才是真正执行请求，在执行请求前进行请求拦截--目的就是改变config
+    if (config?.interceptors?.requestSuccess) {
+      config = config.interceptors.requestSuccess(config);
+    }
+    return new Promise((resolve, reject) => {
+      this.service
+        .request<any, T>(config)
+        .then((res) => {
+          // 响应成功的拦截
+          if (config.interceptors?.responseSuccess) {
+            res = config.interceptors?.responseSuccess<T>(res);
+          }
+          resolve(res);
+        })
+        .catch((err: any) => {
+          if (config.interceptors?.responseErr) {
+            err = config.interceptors?.responseErr(err);
+          }
+          reject(err);
+        });
+    });
   }
 }

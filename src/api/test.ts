@@ -1,10 +1,16 @@
-import service from "../service";
+import { myRequest } from "../service";
+
 interface requestParams {
   username: string;
   password: string;
 }
+interface Res {
+  token: string;
+  nickName: string;
+  userId: number;
+}
 export function login(params: requestParams) {
-  return service.request({
+  return myRequest<requestParams, Res>({
     url: "/login/login",
     params,
     method: "post"

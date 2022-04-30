@@ -1,27 +1,28 @@
-import { MyRequest } from "./request";
+import { config as instanceConfig } from "./config";
+import { MyRequest } from "./request/request";
 import { RequestConfig } from "./types";
-const BASE_URL = "https://bgt.d9lab.net/trade";
-const config: RequestConfig = {
-  baseURL: BASE_URL,
-  headers: {
-    Authorization: "fc627c21-2cae-405b-ad19-66a383c2ca16"
-  },
-  interceptors: {
-    requestSuccess: (config) => {
-      console.log("特有的请求拦截成功");
-      return config;
-    },
-    requestErr: (err: any) => {
-      console.log(err, "特有的请求拦截失败");
-    },
-    responseSuccess: (res) => {
-      console.log("特有的响应拦截成功", res);
-      return res;
-    },
-    responseErr: (err: any) => {
-      console.log("特有的响应拦截失败", err);
-    }
-  }
-};
-
-export default new MyRequest(config);
+// 完整的接口返回成功的话一般返回以下四个参数
+interface IMyResponse<T> {
+  code: number;
+  message: string;
+  success: boolean;
+  data: T;
+}
+// 取出其中的data
+// type IRealResponse<T> = Pick<IMyResponse<T>, "data">;
+interface ImyRequest<T> extends RequestConfig {
+  // RequestConfig里有data，这里再写一次是为了使用传入泛型的方法来约束data类型
+  data?: T;
+}
+const service = new MyRequest(instanceConfig);
+// 该请求方式默认为GET，且一直用data作为参数(条件解决了)；
+// T是真正的请求函数发出的参数的类型
+// V是请求返回体的data的类型
+export function myRequest<T, V = any>(config: ImyRequest<T>) {
+  // 实验室不适用，接口规范可能有不统一的问题，可能出现有用POST 使用params传递的现象
+  // const { method = "GET" } = config;
+  // if (method === "get" || method === "GET") {
+  //   config.params = config.data;
+  // }
+  return service.request<IMyResponse<V>>(config);
+}
