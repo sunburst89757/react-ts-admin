@@ -7,6 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 import zhCN from "antd/lib/locale/zh_CN";
 import { ConfigProvider } from "antd";
 import { login } from "./api/test";
+import { Provider } from "react-redux";
+import { store } from "./store";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -20,7 +22,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ConfigProvider locale={zhCN}>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </ConfigProvider>
     </BrowserRouter>
   </React.StrictMode>

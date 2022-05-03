@@ -6,10 +6,11 @@ interface PropType {
 // 懒加载组件
 export const Lazyload = (path: string) => {
   const Comp = React.lazy(() => import("../pages/Test"));
-  const namedImport = async () => {
-    let { Child } = await import("../pages/Child");
-    return Child;
-  };
+  // ts暂时不知道怎么支持import(`../pages&(path)`)
+  // const namedImport = async () => {
+  //   let { Child } = await import("../pages/Child");
+  //   return Child;
+  // };
   return (
     <React.Suspense fallback={<>加载中……</>}>
       <Comp></Comp>

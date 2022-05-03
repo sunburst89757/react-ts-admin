@@ -2,12 +2,21 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import style from "./Login.module.scss";
 import { userType } from "./types";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../../store/module/user";
 export function Login() {
+  const dispatch = useDispatch();
   const onFinish = () => {};
   const onFinishFailed = () => {};
   const [form] = Form.useForm<userType>();
   const handleClick = () => {
     console.log(form.getFieldValue("username"));
+    dispatch(
+      loginAction({
+        username: "test",
+        password: "123456"
+      })
+    );
   };
   const changeValue = (val: string, val2: userType) => {
     console.log(val);

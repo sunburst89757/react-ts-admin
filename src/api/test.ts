@@ -1,6 +1,6 @@
 import { myRequest } from "../service";
 
-interface requestParams {
+export interface requestParams {
   username: string;
   password: string;
 }
