@@ -2,10 +2,13 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import style from "./Login.module.scss";
 import { userType } from "./types";
-import { useDispatch } from "react-redux";
-import { loginAction } from "../../store/module/user";
+import { loginAction, selectUser } from "../../store/module/user";
+import { useAppDispatch, useAppSelector } from "../../store/types";
+import { useSelector } from "react-redux";
 export function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  // const userInfo = useSelector(selectUser);
+  // const userInfo = useAppSelector((state) => state.user.userInfo);
   const onFinish = () => {};
   const onFinishFailed = () => {};
   const [form] = Form.useForm<userType>();

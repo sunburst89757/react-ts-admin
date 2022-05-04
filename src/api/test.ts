@@ -4,7 +4,7 @@ export interface requestParams {
   username: string;
   password: string;
 }
-interface Res {
+export interface Res {
   token: string;
   nickName: string;
   userId: number;

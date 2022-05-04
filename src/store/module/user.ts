@@ -1,18 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { login, requestParams } from "../../api/test";
-interface res {
-  payload: userInfo;
-}
-interface userInfo {
-  userId: number;
-  role: string;
-  username: string;
-}
-interface stateType {
-  userInfo: userInfo;
-  status: "successed" | "error" | "pending" | "idle";
-  token: string;
-}
+import { RootState } from "..";
+import { Res } from "../../api/test";
+import { stateType, userInfo } from "../types";
+
 const initialState: stateType = {
   userInfo: {
     userId: 10,
@@ -29,27 +20,38 @@ export const loginAction = createAsyncThunk(
     return res.data;
   }
 );
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUserInfo: (state, { payload }: res) => {
-      const { userId, role, username } = payload;
+    updateUserInfo: (state, action: PayloadAction<userInfo>) => {
+      const { userId, role, username } = action.payload;
       state.userInfo.role = role;
       state.userInfo.userId = userId;
       state.userInfo.username = username;
     }
   },
   extraReducers: {
-    "user/loginAction/pending": (state: stateType, action: any) => {
+    "user/loginAction/pending": (
+      state: stateType,
+      action: PayloadAction<any>
+    ) => {
       state.status = "pending";
       console.log("发送状态");
     },
-    "user/loginAction/fullfilled": (state: stateType, action: any) => {
+    "user/loginAction/fulfilled": (
+      state: stateType,
+      action: PayloadAction<Res>
+    ) => {
       state.status = "successed";
+      state.token = action.payload.token;
       console.log("成功", action.payload);
     }
   }
 });
-
+// 导出selector
+export const selectUser = (state: RootState) => state.user.userInfo;
+// 导出actions
+export const { updateUserInfo } = userSlice.actions;
+// 导出reducer
 export const userReducer = userSlice.reducer;
