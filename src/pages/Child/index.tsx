@@ -1,3 +1,3 @@
-export function Child() {
+export default function Child() {
   return <>zheshi child</>;
 }

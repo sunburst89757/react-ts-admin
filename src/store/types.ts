@@ -11,6 +11,5 @@ export interface userInfo {
 }
 export interface stateType {
   userInfo: userInfo;
-  status: "successed" | "error" | "pending" | "idle";
   token: string;
 }

@@ -2,29 +2,26 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import style from "./Login.module.scss";
 import { userType } from "./types";
-import { loginAction, selectUser } from "../../store/module/user";
-import { useAppDispatch, useAppSelector } from "../../store/types";
-import { useSelector } from "react-redux";
+import { loginAction } from "../../store/module/user";
+import { useAppDispatch } from "../../store/types";
+import { useNavigate } from "react-router-dom";
 export function Login() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   // const userInfo = useSelector(selectUser);
   // const userInfo = useAppSelector((state) => state.user.userInfo);
-  const onFinish = () => {};
-  const onFinishFailed = () => {};
-  const [form] = Form.useForm<userType>();
-  const handleClick = () => {
-    console.log(form.getFieldValue("username"));
+  const onFinish = (val: any) => {
+    // 表单验证通过
     dispatch(
       loginAction({
-        username: "test",
-        password: "123456"
+        username: val.username,
+        password: val.password
       })
     );
+    navigate("/");
   };
-  const changeValue = (val: string, val2: userType) => {
-    console.log(val);
-    console.log(val2);
-  };
+  const onFinishFailed = () => {};
+  const [form] = Form.useForm<userType>();
   return (
     <div className={style.loginContainer}>
       <div className={style.title}></div>
@@ -42,7 +39,6 @@ export function Login() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
-            onValuesChange={changeValue}
           >
             <Form.Item
               label="用户名"
@@ -76,7 +72,7 @@ export function Login() {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit" onClick={handleClick}>
+              <Button type="primary" htmlType="submit">
                 登录
               </Button>
             </Form.Item>

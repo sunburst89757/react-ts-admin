@@ -1,16 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { login, requestParams } from "../../api/test";
+import { getUserInfo, login, requestParams } from "../../api/user";
 import { RootState } from "..";
-import { Res } from "../../api/test";
+import { Res } from "../../api/user";
 import { stateType, userInfo } from "../types";
-
+import { cache } from "../../utils/localStorage";
 const initialState: stateType = {
   userInfo: {
-    userId: 10,
-    username: "cy",
-    role: "test"
+    userId: 0,
+    username: "",
+    role: ""
   },
-  status: "idle",
   token: ""
 };
 export const loginAction = createAsyncThunk(
@@ -18,6 +17,18 @@ export const loginAction = createAsyncThunk(
   async (payload: requestParams) => {
     const res = await login(payload);
     return res.data;
+  }
+);
+export const getUserInfoAction = createAsyncThunk(
+  "user/getUserInfo",
+  async (payload: number) => {
+    const res = await getUserInfo(payload);
+    console.log(res);
+    return {
+      userId: 1,
+      username: "test",
+      role: "超级管理员"
+    };
   }
 );
 const userSlice = createSlice({
@@ -32,20 +43,27 @@ const userSlice = createSlice({
     }
   },
   extraReducers: {
-    "user/loginAction/pending": (
-      state: stateType,
-      action: PayloadAction<any>
-    ) => {
-      state.status = "pending";
-      console.log("发送状态");
-    },
     "user/loginAction/fulfilled": (
       state: stateType,
       action: PayloadAction<Res>
     ) => {
-      state.status = "successed";
-      state.token = action.payload.token;
-      console.log("成功", action.payload);
+      const { token } = action.payload;
+      state.token = token;
+      state.userInfo.userId = action.payload.userId;
+      cache.setItem("token", token);
+    },
+    "user/loginAction/rejected": (
+      state: stateType,
+      action: PayloadAction<any>
+    ) => {
+      console.log("登录失败");
+    },
+    "user/getUserInfoAction/fulfilled": (
+      state,
+      action: PayloadAction<userInfo>
+    ) => {
+      const { role, userId, username } = action.payload;
+      state.userInfo = { role, userId, username };
     }
   }
 });

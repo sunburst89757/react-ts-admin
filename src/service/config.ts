@@ -5,8 +5,8 @@ export const config: RequestConfig = {
   headers: {
     Authorization: "fc627c21-2cae-405b-ad19-66a383c2ca16"
   },
-  timeout: 1000 * 60 * 5,
-  interceptors: {
+  timeout: 1000 * 60 * 5
+  /* interceptors: {
     requestSuccess: (config) => {
       console.log("特有的请求拦截成功");
       return config;
@@ -21,5 +21,5 @@ export const config: RequestConfig = {
     responseErr: (err: any) => {
       console.log("特有的响应拦截失败", err);
     }
-  }
+  } */
 };

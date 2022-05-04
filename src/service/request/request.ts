@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { cache } from "../../utils/localStorage";
 import { RequestConfig } from "../types";
 export class MyRequest {
   service: AxiosInstance;
@@ -6,11 +7,15 @@ export class MyRequest {
     this.service = axios.create(config);
     this.service.interceptors.request.use(
       (config: AxiosRequestConfig) => {
-        console.log("所有实例都请求拦截成功");
+        // console.log("所有实例都请求拦截成功");
+        const token = cache.getItem("token");
+        if (token) {
+          config.headers!.Authorization = token;
+        }
         return config;
       },
       (err: any) => {
-        console.log(err, "所有实例都请求拦截失败");
+        // console.log(err, "所有实例都请求拦截失败");
         return Promise.reject(err);
       }
     );
@@ -21,11 +26,11 @@ export class MyRequest {
     );
     this.service.interceptors.response.use(
       (res: AxiosResponse) => {
-        console.log(res, "公共响应拦截成功");
+        // console.log(res, "公共响应拦截成功");
         return res.data;
       },
       (err) => {
-        console.log(err, "公共响应拦截失败");
+        // console.log(err, "公共响应拦截失败");
         return Promise.reject(err);
       }
     );
