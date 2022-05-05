@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.scss";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import { store } from "./store";
 import { BrowserRouter } from "react-router-dom";
 import zhCN from "antd/lib/locale/zh_CN";
 import { ConfigProvider } from "antd";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import reportWebVitals from "./reportWebVitals";
+import "./index.scss";
+import App from "./App";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

@@ -15,10 +15,10 @@ export function Login() {
     dispatch(
       loginAction({
         username: val.username,
-        password: val.password
+        password: val.password,
+        navigate
       })
     );
-    navigate("/");
   };
   const onFinishFailed = () => {};
   const [form] = Form.useForm<userType>();

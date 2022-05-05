@@ -24,3 +24,9 @@ export function getUserInfo(roleId: number) {
     method: "get"
   });
 }
+export function logout() {
+  return myRequest({
+    url: "/login/logout",
+    method: "post"
+  });
+}

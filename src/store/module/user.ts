@@ -4,18 +4,28 @@ import { RootState } from "..";
 import { Res } from "../../api/user";
 import { stateType, userInfo } from "../types";
 import { cache } from "../../utils/localStorage";
+import { NavigateFunction } from "react-router-dom";
+interface IloginType extends requestParams {
+  navigate: NavigateFunction;
+}
 const initialState: stateType = {
   userInfo: {
     userId: 0,
     username: "",
     role: ""
   },
-  token: ""
+  token: "",
+  isShowReloginModal: false
 };
 export const loginAction = createAsyncThunk(
   "user/loginAction",
-  async (payload: requestParams) => {
-    const res = await login(payload);
+  async (payload: IloginType) => {
+    const { username, password, navigate } = payload;
+    const res = await login({
+      username,
+      password
+    });
+    navigate("/");
     return res.data;
   }
 );
@@ -40,6 +50,9 @@ const userSlice = createSlice({
       state.userInfo.role = role;
       state.userInfo.userId = userId;
       state.userInfo.username = username;
+    },
+    changeisShowReloginModal: (state) => {
+      state.isShowReloginModal = !state.isShowReloginModal;
     }
   },
   extraReducers: {
@@ -70,6 +83,6 @@ const userSlice = createSlice({
 // 导出selector
 export const selectUser = (state: RootState) => state.user.userInfo;
 // 导出actions
-export const { updateUserInfo } = userSlice.actions;
+export const { updateUserInfo, changeisShowReloginModal } = userSlice.actions;
 // 导出reducer
 export const userReducer = userSlice.reducer;

@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { cache } from "../../utils/localStorage";
 import { RequestConfig } from "../types";
+import { store } from "../../store";
+import { changeisShowReloginModal } from "../../store/module/user";
 export class MyRequest {
   service: AxiosInstance;
   constructor(config: RequestConfig) {
@@ -27,6 +29,9 @@ export class MyRequest {
     this.service.interceptors.response.use(
       (res: AxiosResponse) => {
         // console.log(res, "公共响应拦截成功");
+        if (res.data.code === 401) {
+          store.dispatch(changeisShowReloginModal());
+        }
         return res.data;
       },
       (err) => {

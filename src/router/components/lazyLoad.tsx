@@ -19,7 +19,7 @@ export function LazyLoad({ path }: PropType) {
 function Redirect({ to }: PropType) {
   return <Navigate to={to!}></Navigate>;
 }
-export function AuthComponent({ children }: PropType) {
+export function AuthComponent({ children }: { children: JSX.Element }) {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const dispatch = useAppDispatch();
   const auth = () => {

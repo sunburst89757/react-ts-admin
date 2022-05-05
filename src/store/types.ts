@@ -12,4 +12,5 @@ export interface userInfo {
 export interface stateType {
   userInfo: userInfo;
   token: string;
+  isShowReloginModal: boolean;
 }
