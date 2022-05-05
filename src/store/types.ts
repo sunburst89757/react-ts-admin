@@ -13,4 +13,5 @@ export interface stateType {
   userInfo: userInfo;
   token: string;
   isShowReloginModal: boolean;
+  datedNum: number;
 }

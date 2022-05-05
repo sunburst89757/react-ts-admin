@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { changeisShowReloginModal } from "../store/module/user";
+import { changeisShowReloginModal, resetDatedNum } from "../store/module/user";
 import { useAppDispatch, useAppSelector } from "../store/types";
 
 export function ReLoginModal() {
@@ -9,10 +9,12 @@ export function ReLoginModal() {
   const navigate = useNavigate();
   const handleOk = () => {
     dispatch(changeisShowReloginModal());
+    dispatch(resetDatedNum());
     navigate("/login");
   };
   const handleCancel = () => {
     dispatch(changeisShowReloginModal());
+    dispatch(resetDatedNum());
   };
   return (
     <>

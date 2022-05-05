@@ -2,7 +2,10 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { cache } from "../../utils/localStorage";
 import { RequestConfig } from "../types";
 import { store } from "../../store";
-import { changeisShowReloginModal } from "../../store/module/user";
+import {
+  changeisShowReloginModal,
+  incrementDatedNum
+} from "../../store/module/user";
 export class MyRequest {
   service: AxiosInstance;
   constructor(config: RequestConfig) {
@@ -30,7 +33,10 @@ export class MyRequest {
       (res: AxiosResponse) => {
         // console.log(res, "公共响应拦截成功");
         if (res.data.code === 401) {
-          store.dispatch(changeisShowReloginModal());
+          store.dispatch(incrementDatedNum());
+          if (store.getState().user.datedNum === 1) {
+            store.dispatch(changeisShowReloginModal());
+          }
         }
         return res.data;
       },

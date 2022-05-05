@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import Child from "../pages/Child";
-import Layout from "../pages/Layout";
+import Layout from "../Layout";
 import { Login } from "../pages/Login";
 import { AuthComponent, LazyLoad } from "./components/lazyLoad";
 

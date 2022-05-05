@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { ReLoginModal } from "../../components/ReLoginModal";
-import { logout } from "../../api/user";
+import { ReLoginModal } from "../components/ReLoginModal";
+import { logout } from "../api/user";
 
 export default function Layout() {
   const logout1 = () => {

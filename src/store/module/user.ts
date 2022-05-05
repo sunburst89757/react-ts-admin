@@ -15,7 +15,8 @@ const initialState: stateType = {
     role: ""
   },
   token: "",
-  isShowReloginModal: false
+  isShowReloginModal: false,
+  datedNum: 0
 };
 export const loginAction = createAsyncThunk(
   "user/loginAction",
@@ -53,6 +54,12 @@ const userSlice = createSlice({
     },
     changeisShowReloginModal: (state) => {
       state.isShowReloginModal = !state.isShowReloginModal;
+    },
+    incrementDatedNum: (state) => {
+      state.datedNum = state.datedNum + 1;
+    },
+    resetDatedNum: (state) => {
+      state.datedNum = 0;
     }
   },
   extraReducers: {
@@ -83,6 +90,11 @@ const userSlice = createSlice({
 // 导出selector
 export const selectUser = (state: RootState) => state.user.userInfo;
 // 导出actions
-export const { updateUserInfo, changeisShowReloginModal } = userSlice.actions;
+export const {
+  updateUserInfo,
+  changeisShowReloginModal,
+  incrementDatedNum,
+  resetDatedNum
+} = userSlice.actions;
 // 导出reducer
 export const userReducer = userSlice.reducer;
