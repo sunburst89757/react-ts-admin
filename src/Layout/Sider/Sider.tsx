@@ -1,6 +1,7 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { MyRouteObject, testRoutes } from "../../router/config";
+import { MyRouteObject, ContanceRoutes } from "../../router/config";
+import { useNavigate } from "react-router-dom";
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(
   label: React.ReactNode,
@@ -19,19 +20,32 @@ function getItem(
 }
 const routeCallBack = (routes: MyRouteObject[]): MenuProps["items"] => {
   return routes.map((route) => {
-    if (route.children && route.children.length > 0) {
-      return getItem(
-        route.meta?.title,
-        route.path!,
-        <AppstoreOutlined></AppstoreOutlined>,
-        routeCallBack(route.children)
-      );
+    // 不是菜单栏直接隐藏
+    if (route.meta?.hidden) {
+      return null;
     } else {
-      return getItem(
-        route.meta?.title,
-        route.path!,
-        <AppstoreOutlined></AppstoreOutlined>
-      );
+      if (route.children && route.children.length > 0) {
+        // 首页的特殊处理
+        if (route.path === "/") {
+          return getItem(
+            route.children[0].meta?.title,
+            route.children[0].path!,
+            <AppstoreOutlined></AppstoreOutlined>
+          );
+        }
+        return getItem(
+          route.meta?.title,
+          route.path!,
+          <AppstoreOutlined></AppstoreOutlined>,
+          routeCallBack(route.children)
+        );
+      } else {
+        return getItem(
+          route.meta?.title,
+          route.path!,
+          <AppstoreOutlined></AppstoreOutlined>
+        );
+      }
     }
   });
 };
@@ -39,9 +53,12 @@ const generateMenuItem = (routes: MyRouteObject[]) => {
   return routeCallBack(routes);
 };
 export function MySider() {
+  const navigate = useNavigate();
   const { Sider } = Layout;
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log(e.keyPath.reverse().join(""));
+    let path = e.keyPath.reverse().join("/");
+    path === "dashboard" ? (path = "/dashboard") : (path = path);
+    navigate(path);
   };
   return (
     <Sider>
@@ -51,7 +68,7 @@ export function MySider() {
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
         mode="inline"
-        items={generateMenuItem(testRoutes)}
+        items={generateMenuItem(ContanceRoutes)}
       />
     </Sider>
   );

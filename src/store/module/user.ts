@@ -78,10 +78,7 @@ const userSlice = createSlice({
     ) => {
       console.log("登录失败");
     },
-    "user/getUserInfoAction/fulfilled": (
-      state,
-      action: PayloadAction<userInfo>
-    ) => {
+    "user/getUserInfo/fulfilled": (state, action: PayloadAction<userInfo>) => {
       const { role, userId, username } = action.payload;
       state.userInfo = { role, userId, username };
     }

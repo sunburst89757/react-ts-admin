@@ -8,6 +8,7 @@ interface PropType {
   to?: string;
   path?: string;
 }
+// path是文件夹的路径
 export function LazyLoad({ path }: PropType) {
   const Component = React.lazy(() => import(`../../pages/${path}`));
   return (
@@ -16,7 +17,7 @@ export function LazyLoad({ path }: PropType) {
     </React.Suspense>
   );
 }
-function Redirect({ to }: PropType) {
+export function Redirect({ to }: PropType) {
   return <Navigate to={to!}></Navigate>;
 }
 export function AuthComponent({ children }: { children: JSX.Element }) {
@@ -29,11 +30,20 @@ export function AuthComponent({ children }: { children: JSX.Element }) {
     } else {
       if (!userInfo.role) {
         // 说明没有获取用户的角色，第一次登录需要获取用户信息
-        console.log(":@@@@@@@@");
         dispatch(getUserInfoAction(userInfo.userId));
       }
       return true;
     }
   };
   return <div>{auth() ? children : <Redirect to="/login"></Redirect>}</div>;
+}
+// path是文件夹的路径
+export function RouteComponent({ path }: { path: string }) {
+  return (
+    <>
+      <AuthComponent>
+        <LazyLoad path={path}></LazyLoad>
+      </AuthComponent>
+    </>
+  );
 }
