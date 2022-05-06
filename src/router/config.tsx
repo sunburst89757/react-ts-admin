@@ -3,11 +3,22 @@ import Child from "../pages/Child";
 import Layout from "../Layout";
 import { Login } from "../pages/Login";
 import { AuthComponent, LazyLoad } from "./components/lazyLoad";
-
-export const testRoutes: RouteObject[] = [
+interface MetaObj {
+  hidden?: boolean;
+  role?: string;
+  title: string;
+}
+export interface MyRouteObject extends RouteObject {
+  meta?: MetaObj;
+  children?: MyRouteObject[];
+}
+export const testRoutes: MyRouteObject[] = [
   {
     element: <Login />,
-    path: "/login"
+    path: "/login",
+    meta: {
+      title: "登录界面"
+    }
   },
   {
     path: "/",
@@ -16,6 +27,9 @@ export const testRoutes: RouteObject[] = [
         <Layout></Layout>
       </AuthComponent>
     ),
+    meta: {
+      title: "测试页面"
+    },
     children: [
       {
         index: true,
@@ -24,11 +38,17 @@ export const testRoutes: RouteObject[] = [
           <AuthComponent>
             <LazyLoad path="Dashboard"></LazyLoad>
           </AuthComponent>
-        )
+        ),
+        meta: {
+          title: "首页"
+        }
       },
       {
         element: <Child></Child>,
-        path: "/child"
+        path: "/child",
+        meta: {
+          title: "孩子页面"
+        }
       }
     ]
   }
