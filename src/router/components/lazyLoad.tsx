@@ -30,7 +30,7 @@ export function AuthComponent({ children }: { children: JSX.Element }) {
     } else {
       if (!userInfo.role) {
         // 说明没有获取用户的角色，第一次登录需要获取用户信息
-        dispatch(getUserInfoAction(userInfo.userId));
+        dispatch(getUserInfoAction());
       }
       return true;
     }

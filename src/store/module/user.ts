@@ -26,18 +26,16 @@ export const loginAction = createAsyncThunk(
       username,
       password
     });
-    navigate("/");
+    navigate("/dashboard");
     return res.data;
   }
 );
 export const getUserInfoAction = createAsyncThunk(
   "user/getUserInfo",
-  async (payload: number) => {
-    const res = await getUserInfo(payload);
+  async () => {
+    const res = await getUserInfo();
     console.log(res);
     return {
-      userId: 1,
-      username: "test",
       role: "超级管理员"
     };
   }
@@ -78,9 +76,12 @@ const userSlice = createSlice({
     ) => {
       console.log("登录失败");
     },
-    "user/getUserInfo/fulfilled": (state, action: PayloadAction<userInfo>) => {
-      const { role, userId, username } = action.payload;
-      state.userInfo = { role, userId, username };
+    "user/getUserInfo/fulfilled": (
+      state,
+      action: PayloadAction<{ role: string }>
+    ) => {
+      const { role } = action.payload;
+      state.userInfo.role = role;
     }
   }
 });

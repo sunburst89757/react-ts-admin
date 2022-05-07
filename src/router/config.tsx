@@ -27,20 +27,16 @@ export const asyncRoutes: MyRouteObject[] = [
       {
         index: true,
         path: "customerManage",
-        element: (
-          <RouteComponent path="SalesManage/CustomerManage"></RouteComponent>
-        ),
+        element: <RouteComponent path="SalesManage/CustomerManage" />,
         meta: {
           title: "顾客管理"
         }
       },
       {
         path: "productManage",
-        element: (
-          <RouteComponent path="SalesManage/ProductManage"></RouteComponent>
-        ),
+        element: <RouteComponent path="SalesManage/ProductManage" />,
         meta: {
-          title: "销售管理"
+          title: "产品管理"
         }
       }
     ]
@@ -66,7 +62,7 @@ export const ContanceRoutes: MyRouteObject[] = [
       {
         index: true,
         path: "dashboard",
-        element: <RouteComponent path="Dashboard"></RouteComponent>,
+        element: <RouteComponent path="Dashboard" />,
         meta: {
           title: "首页"
         }

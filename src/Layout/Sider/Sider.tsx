@@ -2,6 +2,7 @@ import { Layout, Menu, MenuProps } from "antd";
 import { AppstoreOutlined } from "@ant-design/icons";
 import { MyRouteObject, ContanceRoutes } from "../../router/config";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/types";
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(
   label: React.ReactNode,
@@ -56,6 +57,9 @@ export function MySider() {
   const navigate = useNavigate();
   const { Sider } = Layout;
   const onClick: MenuProps["onClick"] = (e) => {
+    // keypath数组控制菜单选中谁
+    console.log(e, "candan");
+
     let path = e.keyPath.reverse().join("/");
     path === "dashboard" ? (path = "/dashboard") : (path = path);
     navigate(path);
@@ -65,8 +69,7 @@ export function MySider() {
       <Menu
         onClick={onClick}
         style={{ width: "100%", height: "100%" }}
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
+        defaultSelectedKeys={["dashboard"]}
         mode="inline"
         items={generateMenuItem(ContanceRoutes)}
       />
