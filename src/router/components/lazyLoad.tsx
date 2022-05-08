@@ -20,10 +20,16 @@ export function LazyLoad({ path }: PropType) {
 export function Redirect({ to }: PropType) {
   return <Navigate to={to!}></Navigate>;
 }
-export function AuthComponent({ children }: { children: JSX.Element }) {
+export function AuthComponent({
+  children,
+  role
+}: {
+  children: JSX.Element;
+  role?: string[];
+}) {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const dispatch = useAppDispatch();
-  const auth = () => {
+  const authLogin = () => {
     const token = cache.getItem("token");
     if (!token) {
       return false;
@@ -35,13 +41,38 @@ export function AuthComponent({ children }: { children: JSX.Element }) {
       return true;
     }
   };
-  return <div>{auth() ? children : <Redirect to="/login"></Redirect>}</div>;
+  const authRoute = () => {
+    if (!role) {
+      return true;
+    } else {
+      return role.includes(userInfo.role);
+    }
+  };
+  return (
+    <div>
+      {authLogin() ? (
+        authRoute() ? (
+          children
+        ) : (
+          <Redirect to="/404"></Redirect>
+        )
+      ) : (
+        <Redirect to="/login"></Redirect>
+      )}
+    </div>
+  );
 }
 // path是文件夹的路径
-export function RouteComponent({ path }: { path: string }) {
+export function RouteComponent({
+  path,
+  role
+}: {
+  path: string;
+  role?: string[];
+}) {
   return (
     <>
-      <AuthComponent>
+      <AuthComponent role={role}>
         <LazyLoad path={path}></LazyLoad>
       </AuthComponent>
     </>

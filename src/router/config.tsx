@@ -9,7 +9,7 @@ import {
 } from "./components/lazyLoad";
 interface MetaObj {
   hidden?: boolean;
-  role?: string;
+  role?: string[];
   title: string;
 }
 export interface MyRouteObject extends RouteObject {
@@ -29,7 +29,8 @@ export const asyncRoutes: MyRouteObject[] = [
         path: "customerManage",
         element: <RouteComponent path="SalesManage/CustomerManage" />,
         meta: {
-          title: "顾客管理"
+          title: "顾客管理",
+          role: ["admin"]
         }
       },
       {

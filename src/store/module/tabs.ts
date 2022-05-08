@@ -29,9 +29,16 @@ const tabSlice = createSlice({
     },
     changeTabActive: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
+    },
+    resetInitialState: (state) => {
+      // 不能直接initialState 赋值给state
+      const { tabs, activeTab } = initialState;
+      state.tabs = tabs;
+      state.activeTab = activeTab;
     }
   }
 });
 
 export const tabsReducer = tabSlice.reducer;
-export const { addTab, removeTab, changeTabActive } = tabSlice.actions;
+export const { addTab, removeTab, changeTabActive, resetInitialState } =
+  tabSlice.actions;

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { NavigateFunction } from "react-router-dom";
 import { getUserInfo, login, requestParams } from "../../api/user";
 import { RootState } from "..";
 import { Res } from "../../api/user";
 import { stateType, userInfo } from "../types";
 import { cache } from "../../utils/localStorage";
-import { NavigateFunction } from "react-router-dom";
 interface IloginType extends requestParams {
   navigate: NavigateFunction;
 }
@@ -58,6 +58,13 @@ const userSlice = createSlice({
     },
     resetDatedNum: (state) => {
       state.datedNum = 0;
+    },
+    resetInitialState: (state) => {
+      const { userInfo, datedNum, isShowReloginModal, token } = initialState;
+      state.userInfo = userInfo;
+      state.datedNum = datedNum;
+      state.isShowReloginModal = isShowReloginModal;
+      state.token = token;
     }
   },
   extraReducers: {
@@ -92,7 +99,8 @@ export const {
   updateUserInfo,
   changeisShowReloginModal,
   incrementDatedNum,
-  resetDatedNum
+  resetDatedNum,
+  resetInitialState
 } = userSlice.actions;
 // 导出reducer
 export const userReducer = userSlice.reducer;
