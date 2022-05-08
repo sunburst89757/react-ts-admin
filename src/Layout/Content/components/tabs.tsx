@@ -4,7 +4,7 @@ import { useAppSelector } from "../../../store/types";
 const { TabPane } = Tabs;
 export function MyTabs() {
   const location = useLocation();
-  const { pathname } = location;
+  console.log(location);
   const tabs = useAppSelector((state) => state.tabs.tabs);
   const tabActive = useAppSelector((state) => state.tabs.activeTab);
   const onChange = (activeKey: string) => {

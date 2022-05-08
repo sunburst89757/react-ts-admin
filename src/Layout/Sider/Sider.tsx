@@ -1,8 +1,9 @@
 import { Layout, Menu, MenuProps } from "antd";
+import _ from "lodash";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { MyRouteObject, ContanceRoutes } from "../../router/config";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/types";
+import { MyRouteObject, myRoutes } from "../../router/config";
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(
   label: React.ReactNode,
@@ -53,13 +54,38 @@ const routeCallBack = (routes: MyRouteObject[]): MenuProps["items"] => {
 const generateMenuItem = (routes: MyRouteObject[]) => {
   return routeCallBack(routes);
 };
+function generateAccessRoutes(role: string, routes: MyRouteObject[]): void {
+  if (role === "super-admin") {
+    return;
+  } else {
+    const delIndexs: number[] = [];
+    routes.forEach((route) => {
+      if (!route?.meta?.role || route.meta?.role.includes(role)) {
+        if (route.children && route.children.length > 0) {
+          generateAccessRoutes(role, route.children);
+        } else {
+          return;
+        }
+      } else {
+        const index = routes.findIndex((item) => item === route);
+        delIndexs.push(index);
+      }
+    });
+    delIndexs.forEach((val, index) => {
+      // 只有第一个删除的元素位置是正确的，后面由于数组长度减少，因此对应的序号也要减一才可以
+      index === 0 ? routes.splice(val, 1) : routes.splice(val - 1, 1);
+    });
+  }
+}
 export function MySider() {
   const navigate = useNavigate();
+  const role = useAppSelector((state) => state.user.userInfo.role);
+  const routes: MyRouteObject[] = _.cloneDeep(myRoutes);
+  generateAccessRoutes(role, routes);
   const { Sider } = Layout;
   const onClick: MenuProps["onClick"] = (e) => {
     // keypath数组控制菜单选中谁
     console.log(e, "candan");
-
     let path = e.keyPath.reverse().join("/");
     path === "dashboard" ? (path = "/dashboard") : (path = path);
     navigate(path);
@@ -71,7 +97,7 @@ export function MySider() {
         style={{ width: "100%", height: "100%" }}
         defaultSelectedKeys={["dashboard"]}
         mode="inline"
-        items={generateMenuItem(ContanceRoutes)}
+        items={generateMenuItem(routes)}
       />
     </Sider>
   );

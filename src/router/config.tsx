@@ -16,7 +16,32 @@ export interface MyRouteObject extends RouteObject {
   meta?: MetaObj;
   children?: MyRouteObject[];
 }
-export const asyncRoutes: MyRouteObject[] = [
+/* 
+  配置说明
+  菜单路由：siderRoutes：根据用户角色生成对应的菜单
+  meta.role配置角色，没有这个属性的路由，表明全部都有这个菜单
+  role是super-admin的拥有全部路由的访问权限
+  meta.role = ["admin","editor"]：表明admin editor super-admin拥有这三个菜单的访问权限
+*/
+export const siderRoutes: MyRouteObject[] = [
+  {
+    path: "/",
+    element: (
+      <AuthComponent>
+        <MyLayout></MyLayout>
+      </AuthComponent>
+    ),
+    children: [
+      {
+        index: true,
+        path: "dashboard",
+        element: <RouteComponent path="Dashboard" />,
+        meta: {
+          title: "首页"
+        }
+      }
+    ]
+  },
   {
     path: "/salesManage",
     element: <MyLayout></MyLayout>,
@@ -43,7 +68,7 @@ export const asyncRoutes: MyRouteObject[] = [
     ]
   }
 ];
-export const ContanceRoutes: MyRouteObject[] = [
+export const myRoutes: MyRouteObject[] = [
   {
     element: <Login />,
     path: "/login",
@@ -51,24 +76,6 @@ export const ContanceRoutes: MyRouteObject[] = [
       title: "登录界面",
       hidden: true
     }
-  },
-  {
-    path: "/",
-    element: (
-      <AuthComponent>
-        <MyLayout></MyLayout>
-      </AuthComponent>
-    ),
-    children: [
-      {
-        index: true,
-        path: "dashboard",
-        element: <RouteComponent path="Dashboard" />,
-        meta: {
-          title: "首页"
-        }
-      }
-    ]
   },
   {
     path: "/404",
@@ -86,5 +93,5 @@ export const ContanceRoutes: MyRouteObject[] = [
       hidden: true
     }
   },
-  ...asyncRoutes
+  ...siderRoutes
 ];

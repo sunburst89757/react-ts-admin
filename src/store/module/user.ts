@@ -36,7 +36,7 @@ export const getUserInfoAction = createAsyncThunk(
     const res = await getUserInfo();
     console.log(res);
     return {
-      role: "超级管理员"
+      role: "super-admin"
     };
   }
 );

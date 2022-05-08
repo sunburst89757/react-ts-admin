@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.0.2",
     "antd": "^4.20.0",
     "axios": "^0.27.1",
+    "lodash": "^4.17.21",
     "node-sass": "npm:dart-sass@^1.25.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -52,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.182",
     "@types/react-transition-group": "^4.4.4",
     "@types/redux-recycle": "^1.2.3",
     "commitizen": "^4.2.4",
