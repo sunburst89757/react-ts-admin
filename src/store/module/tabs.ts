@@ -33,8 +33,30 @@ const tabSlice = createSlice({
       state.activeTab = action.payload.key;
       state.menuActive = selectMenuActive(action.payload.key);
     },
-    removeTab: (state, action: PayloadAction<number>) => {
-      state.tabs.splice(action.payload, 1);
+    removeTab: (state, action: PayloadAction<string>) => {
+      const index = state.tabs.findIndex((tab) => tab.key === action.payload);
+      console.log(index);
+      state.tabs.splice(index, 1);
+      // 删除第一个
+      if (index === 0) {
+        // 第一个元素也是最后一个元素
+        if (state.tabs.length === 0) {
+          state.tabs.push({
+            key: "/dashboard",
+            title: "首页"
+          });
+          state.activeTab = "/dashboard";
+          state.menuActive = ["dashboard"];
+        } else {
+          // 第一个元素不是最后一个元素
+          state.activeTab = state.tabs[0].key;
+          state.menuActive = selectMenuActive(state.tabs[0].key);
+        }
+      } else {
+        // 删除中间的tab
+        state.activeTab = state.tabs[index - 1].key;
+        state.menuActive = selectMenuActive(state.tabs[index - 1].key);
+      }
     },
     changeTabActive: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
