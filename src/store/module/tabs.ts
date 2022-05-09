@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-type tabObject = {
+export type tabObject = {
   title: string;
   key: string;
   /* key设置路由 title就是标题 */
