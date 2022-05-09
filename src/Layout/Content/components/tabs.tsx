@@ -1,22 +1,20 @@
 import { Tabs } from "antd";
-import { useLocation } from "react-router-dom";
-import { useAppSelector } from "../../../store/types";
+import { useNavigate } from "react-router-dom";
+import { changeTabActive } from "../../../store/module/tabs";
+import { useAppDispatch, useAppSelector } from "../../../store/types";
 const { TabPane } = Tabs;
 export function MyTabs() {
-  const location = useLocation();
-  console.log("fdhdfhtg", location);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const tabs = useAppSelector((state) => state.tabs.tabs);
   const tabActive = useAppSelector((state) => state.tabs.activeTab);
-  const onChange = (activeKey: string) => {
-    console.log(activeKey);
-  };
   const onTabClick = (activeKey: string) => {
-    console.log(activeKey);
+    dispatch(changeTabActive(activeKey));
+    navigate(activeKey);
   };
   return (
     <Tabs
       type="editable-card"
-      onChange={onChange}
       activeKey={tabActive}
       defaultActiveKey={"/dashboard"}
       hideAdd

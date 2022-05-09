@@ -7,6 +7,7 @@ export type tabObject = {
 type tabsState = {
   tabs: tabObject[];
   activeTab: string;
+  menuActive: string[];
 };
 const initialState: tabsState = {
   tabs: [
@@ -15,7 +16,13 @@ const initialState: tabsState = {
       title: "首页"
     }
   ],
-  activeTab: "/dashboard"
+  activeTab: "/dashboard",
+  menuActive: ["dashboard"]
+};
+const selectMenuActive = (key: string): string[] => {
+  const arr: any[] = key.split("/");
+  arr.shift();
+  return arr;
 };
 const tabSlice = createSlice({
   name: "tabs",
@@ -23,18 +30,22 @@ const tabSlice = createSlice({
   reducers: {
     addTab: (state, action: PayloadAction<tabObject>) => {
       state.tabs.push(action.payload);
+      state.activeTab = action.payload.key;
+      state.menuActive = selectMenuActive(action.payload.key);
     },
     removeTab: (state, action: PayloadAction<number>) => {
       state.tabs.splice(action.payload, 1);
     },
     changeTabActive: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
+      state.menuActive = selectMenuActive(action.payload);
     },
     resetInitialState: (state) => {
       // 不能直接initialState 赋值给state
-      const { tabs, activeTab } = initialState;
+      const { tabs, activeTab, menuActive } = initialState;
       state.tabs = tabs;
       state.activeTab = activeTab;
+      state.menuActive = menuActive;
     }
   }
 });

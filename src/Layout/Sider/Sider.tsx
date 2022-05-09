@@ -121,6 +121,7 @@ export function MySider() {
   const dispatch = useAppDispatch();
   const role = useAppSelector((state) => state.user.userInfo.role);
   const tabs = useAppSelector((state) => state.tabs.tabs);
+  const menuActive = useAppSelector((state) => state.tabs.menuActive);
   const routes: MyRouteObject[] = _.cloneDeep(myRoutes);
   generateAccessRoutes(role, routes);
   const { Sider } = Layout;
@@ -143,8 +144,10 @@ export function MySider() {
         onClick={onClick}
         style={{ width: "100%", height: "100%" }}
         defaultSelectedKeys={["dashboard"]}
+        selectedKeys={menuActive}
         mode="inline"
         items={generateMenuItem(routes)}
+        theme="dark"
       />
     </Sider>
   );
