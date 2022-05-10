@@ -35,7 +35,7 @@ const tabSlice = createSlice({
     },
     removeTab: (state, action: PayloadAction<string>) => {
       const index = state.tabs.findIndex((tab) => tab.key === action.payload);
-      console.log(index);
+      // console.log(index);
       state.tabs.splice(index, 1);
       // 删除第一个
       if (index === 0) {
