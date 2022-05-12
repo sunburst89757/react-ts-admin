@@ -130,13 +130,19 @@ export function MySider() {
     console.log(e, "candan");
     let path = e.keyPath.reverse().join("/");
     path === "dashboard" ? (path = "/dashboard") : (path = path);
-    const newTab = generateTab(path, e.key);
-    if (IsNewTabInTabs(tabs, newTab)) {
-      dispatch(changeTabActive(newTab.key));
+    // abc这个是跳转外链的，不需要生成tab
+    if (path !== "/abc") {
+      const newTab = generateTab(path, e.key);
+      if (IsNewTabInTabs(tabs, newTab)) {
+        dispatch(changeTabActive(newTab.key));
+      } else {
+        dispatch(addTab(newTab));
+      }
+      navigate(path);
     } else {
-      dispatch(addTab(newTab));
+      // 外链跳转不可以使用navigate
+      window.location.href = "https://github.com/sunburst89757/react-ts-admin";
     }
-    navigate(path);
   };
   return (
     <Sider>

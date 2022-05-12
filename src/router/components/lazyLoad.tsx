@@ -1,4 +1,4 @@
-import React from "react";
+import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 import { getUserInfoAction } from "../../store/module/user";
 import { useAppDispatch, useAppSelector } from "../../store/types";
@@ -10,11 +10,11 @@ interface PropType {
 }
 // path是文件夹的路径
 export function LazyLoad({ path }: PropType) {
-  const Component = React.lazy(() => import(`../../pages/${path}`));
+  const Component = lazy(() => import(`../../pages/${path}`));
   return (
-    <React.Suspense fallback={<>加载中……</>}>
+    <Suspense fallback={<>加载中……</>}>
       <Component></Component>
-    </React.Suspense>
+    </Suspense>
   );
 }
 export function Redirect({ to }: PropType) {

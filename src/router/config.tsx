@@ -66,6 +66,14 @@ export const siderRoutes: MyRouteObject[] = [
         }
       }
     ]
+  },
+  // 外部链接跳转github，这里的配置没什么意义
+  {
+    path: "/abc",
+    element: <Redirect to="/404"></Redirect>,
+    meta: {
+      title: "Github"
+    }
   }
 ];
 export const myRoutes: MyRouteObject[] = [
