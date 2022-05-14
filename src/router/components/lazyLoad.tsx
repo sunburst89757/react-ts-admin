@@ -29,6 +29,7 @@ export function AuthComponent({
 }) {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const dispatch = useAppDispatch();
+  // 验证是否登录（刷新）
   const authLogin = () => {
     const token = cache.getItem("token");
     if (!token) {
@@ -41,8 +42,9 @@ export function AuthComponent({
       return true;
     }
   };
+  // 验证权限路由
   const authRoute = () => {
-    if (!role) {
+    if (!role || userInfo.role === "super-admin") {
       return true;
     } else {
       return role.includes(userInfo.role);

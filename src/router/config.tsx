@@ -20,9 +20,10 @@ export interface MyRouteObject extends RouteObject {
   配置说明
   菜单路由：siderRoutes：根据用户角色生成对应的菜单
   meta.role配置角色，没有这个属性的路由，表明全部都有这个菜单
-  role是super-admin的拥有全部路由的访问权限
+  用户的role是super-admin的拥有全部路由的访问权限
   meta.role = ["admin","editor"]：表明admin editor super-admin拥有这三个菜单的访问权限
-*/
+  meta.role配置的是菜单显示的路由，系统的权限路由依靠是element属性组件上传递的role来控制
+  */
 export const siderRoutes: MyRouteObject[] = [
   {
     path: "/",
@@ -52,7 +53,10 @@ export const siderRoutes: MyRouteObject[] = [
       {
         index: true,
         path: "customerManage",
-        element: <RouteComponent path="SalesManage/CustomerManage" />,
+        element: (
+          // 只有admin和super-admin才可以访问这个页面
+          <RouteComponent path="SalesManage/CustomerManage" role={["admin"]} />
+        ),
         meta: {
           title: "顾客管理",
           role: ["admin"]
