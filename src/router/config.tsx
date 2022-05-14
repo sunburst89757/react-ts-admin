@@ -7,15 +7,7 @@ import {
   Redirect,
   RouteComponent
 } from "./components/lazyLoad";
-interface MetaObj {
-  hidden?: boolean;
-  role?: string[];
-  title: string;
-}
-export interface MyRouteObject extends RouteObject {
-  meta?: MetaObj;
-  children?: MyRouteObject[];
-}
+
 /* 
   配置说明
   菜单路由：siderRoutes：根据用户角色生成对应的菜单
@@ -24,7 +16,7 @@ export interface MyRouteObject extends RouteObject {
   meta.role = ["admin","editor"]：表明admin editor super-admin拥有这三个菜单的访问权限
   meta.role配置的是菜单显示的路由，系统的权限路由依靠是element属性组件上传递的role来控制
   */
-export const siderRoutes: MyRouteObject[] = [
+export const siderRoutes: RouteObject[] = [
   {
     path: "/",
     element: (
@@ -71,6 +63,7 @@ export const siderRoutes: MyRouteObject[] = [
       }
     ]
   },
+
   // 外部链接跳转github，这里的配置没什么意义
   {
     path: "/abc",
@@ -80,7 +73,7 @@ export const siderRoutes: MyRouteObject[] = [
     }
   }
 ];
-export const myRoutes: MyRouteObject[] = [
+export const myRoutes: RouteObject[] = [
   {
     element: <Login />,
     path: "/login",

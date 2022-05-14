@@ -11,6 +11,7 @@
     "@types/node": "^16.11.28",
     "@types/react": "^18.0.6",
     "@types/react-dom": "^18.0.2",
+    "ahooks": "^3.3.10",
     "antd": "^4.20.0",
     "axios": "^0.27.1",
     "lodash": "^4.17.21",
