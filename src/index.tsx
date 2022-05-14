@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { store } from "./store";
+import { store, persistor } from "./store";
 import { BrowserRouter } from "react-router-dom";
 import zhCN from "antd/lib/locale/zh_CN";
 import { ConfigProvider } from "antd";
 import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
+import { PersistGate } from "redux-persist/integration/react";
 import "./index.scss";
 import App from "./App";
 const root = ReactDOM.createRoot(
@@ -16,7 +17,9 @@ root.render(
     <BrowserRouter>
       <ConfigProvider locale={zhCN}>
         <Provider store={store}>
-          <App />
+          <PersistGate persistor={persistor}>
+            <App />
+          </PersistGate>
         </Provider>
       </ConfigProvider>
     </BrowserRouter>
