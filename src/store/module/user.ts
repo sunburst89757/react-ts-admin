@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { NavigateFunction } from "react-router-dom";
-import { getUserInfo, login, requestParams } from "../../api/user";
+import { login, requestParams } from "../../api/user";
 import { RootState } from "..";
 import { Res } from "../../api/user";
 import { stateType, userInfo } from "../types";
@@ -28,16 +28,6 @@ export const loginAction = createAsyncThunk(
     });
     navigate("/dashboard");
     return res.data;
-  }
-);
-export const getUserInfoAction = createAsyncThunk(
-  "user/getUserInfo",
-  async () => {
-    const res = await getUserInfo();
-    console.log(res);
-    return {
-      role: "super-admin"
-    };
   }
 );
 const userSlice = createSlice({
@@ -75,6 +65,8 @@ const userSlice = createSlice({
       const { token } = action.payload;
       state.token = token;
       state.userInfo.userId = action.payload.userId;
+      // 用户角色本来应该从action.payload里传递，新项目需要接口更改
+      state.userInfo.role = "super-admin";
       cache.setItem("token", token);
     },
     "user/loginAction/rejected": (
@@ -82,13 +74,6 @@ const userSlice = createSlice({
       action: PayloadAction<any>
     ) => {
       console.log("登录失败");
-    },
-    "user/getUserInfo/fulfilled": (
-      state,
-      action: PayloadAction<{ role: string }>
-    ) => {
-      const { role } = action.payload;
-      state.userInfo.role = role;
     }
   }
 });

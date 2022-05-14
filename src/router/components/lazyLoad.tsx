@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
-import { getUserInfoAction } from "../../store/module/user";
-import { useAppDispatch, useAppSelector } from "../../store/types";
+import { useAppSelector } from "../../store/types";
 import { cache } from "../../utils/localStorage";
 interface PropType {
   children?: JSX.Element;
@@ -28,19 +27,19 @@ export function AuthComponent({
   role?: string[];
 }) {
   const userInfo = useAppSelector((state) => state.user.userInfo);
-  const dispatch = useAppDispatch();
   // 验证是否登录（刷新）
   const authLogin = () => {
     const token = cache.getItem("token");
     if (!token) {
       return false;
-    } else {
-      if (!userInfo.role) {
-        // 说明没有获取用户的角色，第一次登录需要获取用户信息
-        dispatch(getUserInfoAction());
-      }
-      return true;
+      // } else {
+      //   if (!userInfo.role) {
+      //     // 说明没有获取用户的角色，第一次登录需要获取用户信息
+      //     dispatch(getUserInfoAction());
+      //   }
     }
+    // 不用考虑刷新，因为role已经数据持久化了刷新不会丢失
+    return true;
   };
   // 验证权限路由
   const authRoute = () => {
