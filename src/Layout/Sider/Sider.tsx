@@ -80,7 +80,7 @@ function generateAccessRoutes(role: string, routes: RouteObject[]): void {
     });
   }
 }
-export function MySider() {
+export function MySider({ isCollapse }: { isCollapse: boolean }) {
   const navigate = useNavigate();
   const role = useAppSelector((state) => state.user.userInfo.role);
   const menuActive = useAppSelector((state) => state.tabs.menuActive);
@@ -101,7 +101,7 @@ export function MySider() {
     }
   };
   return (
-    <Sider>
+    <Sider trigger={null} collapsible collapsed={isCollapse}>
       <Menu
         onClick={onClick}
         style={{ width: "100%", height: "100%" }}
