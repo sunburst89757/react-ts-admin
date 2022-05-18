@@ -32,7 +32,6 @@ export function MyTabs() {
     navigate(tabActive);
   }, [tabActive]);
   useEffect(() => {
-    console.log("路由变化");
     const matchRoute = matchRoutes(siderRoutes, location.pathname)!;
     const newTab: tabObject = {
       key: matchRoute[matchRoute.length - 1].pathname,

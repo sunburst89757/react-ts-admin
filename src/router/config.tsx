@@ -69,7 +69,40 @@ export const siderRoutes: RouteObject[] = [
       }
     ]
   },
-
+  {
+    path: "/purchaseManage",
+    element: <MyLayout></MyLayout>,
+    meta: {
+      title: "采购管理"
+    },
+    children: [
+      {
+        index: true,
+        path: "areaManage",
+        element: (
+          <RouteComponent
+            path="PurchaseManage/AreaManage"
+            title="区域管理"
+          ></RouteComponent>
+        ),
+        meta: {
+          title: " 区域管理"
+        }
+      },
+      {
+        path: "supplierManage",
+        element: (
+          <RouteComponent
+            path="PurchaseManage/SupplierManage"
+            title="供应商管理"
+          ></RouteComponent>
+        ),
+        meta: {
+          title: "供应商管理"
+        }
+      }
+    ]
+  },
   // 外部链接跳转github，这里的配置没什么意义
   {
     path: "/abc",

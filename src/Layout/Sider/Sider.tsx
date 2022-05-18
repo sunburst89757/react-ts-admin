@@ -1,10 +1,10 @@
 import { Layout, Menu, MenuProps } from "antd";
 import _ from "lodash";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { RouteObject, useNavigate } from "react-router-dom";
+import { RouteObject, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/types";
 import { siderRoutes } from "../../router/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type MenuItem = Required<MenuProps>["items"][number];
 // antd根据配置生成的菜单项
 function getItem(
@@ -81,17 +81,36 @@ function generateAccessRoutes(role: string, routes: RouteObject[]): void {
     });
   }
 }
+// 生成一级菜单的key用于展开父级菜单
+function generateRootSubmenuKeys(routes: RouteObject[]): string[] {
+  const res: string[] = [];
+  routes.forEach((route) => {
+    res.push(route.path!);
+  });
+  return res;
+}
 export function MySider({ isCollapse }: { isCollapse: boolean }) {
-  const [openKeys, setOpenKeys] = useState(["customerManage"]);
-  const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
-    console.log("keys", keys);
-  };
+  const { Sider } = Layout;
+  const location = useLocation();
   const navigate = useNavigate();
+  const [openKeys, setOpenKeys] = useState<any[]>([]);
   const role = useAppSelector((state) => state.user.userInfo.role);
   const menuActive = useAppSelector((state) => state.tabs.menuActive);
+  // 生成该用户可以访问的路由
   const routes: RouteObject[] = _.cloneDeep(siderRoutes);
   generateAccessRoutes(role, routes);
-  const { Sider } = Layout;
+  const rootSubmenuKeys = generateRootSubmenuKeys(routes);
+  // 多级菜单点击箭头展开的回调
+  const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
+    console.log("查看keys", keys);
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
+  // 点击菜单项
   const onClick: MenuProps["onClick"] = (e) => {
     // keypath数组控制菜单选中谁
     console.log(e, "candan");
@@ -105,6 +124,10 @@ export function MySider({ isCollapse }: { isCollapse: boolean }) {
       window.location.href = "https://github.com/sunburst89757/react-ts-admin";
     }
   };
+  // 路由跳转引起的菜单展开选中效果显示
+  useEffect(() => {
+    setOpenKeys(["/" + location.pathname.split("/")[1]!]);
+  }, [location.pathname]);
   return (
     <Sider trigger={null} collapsible collapsed={isCollapse}>
       <Menu
@@ -113,8 +136,9 @@ export function MySider({ isCollapse }: { isCollapse: boolean }) {
         defaultSelectedKeys={["dashboard"]}
         selectedKeys={menuActive}
         mode="inline"
-        // openKeys={openKeys}
-        // onOpenChange={onOpenChange}
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
+        // 根据用户可以访问的路由生成显示的菜单结构
         items={generateMenuItem(routes)}
         theme="dark"
       />
