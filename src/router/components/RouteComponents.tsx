@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../store/types";
 import { cache } from "../../utils/localStorage";
@@ -66,11 +66,16 @@ export function AuthComponent({
 // path是文件夹的路径
 export function RouteComponent({
   path,
-  role
+  role,
+  title
 }: {
   path: string;
   role?: string[];
+  title: string;
 }) {
+  useEffect(() => {
+    document.title = title;
+  });
   return (
     <>
       <AuthComponent role={role}>

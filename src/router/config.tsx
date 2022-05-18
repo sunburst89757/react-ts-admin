@@ -6,7 +6,7 @@ import {
   LazyLoad,
   Redirect,
   RouteComponent
-} from "./components/lazyLoad";
+} from "./components/RouteComponents";
 
 /* 
   配置说明
@@ -28,7 +28,7 @@ export const siderRoutes: RouteObject[] = [
       {
         index: true,
         path: "dashboard",
-        element: <RouteComponent path="Dashboard" />,
+        element: <RouteComponent path="Dashboard" title="首页" />,
         meta: {
           title: "首页"
         }
@@ -47,7 +47,11 @@ export const siderRoutes: RouteObject[] = [
         path: "customerManage",
         element: (
           // 只有admin和super-admin才可以访问这个页面
-          <RouteComponent path="SalesManage/CustomerManage" role={["admin"]} />
+          <RouteComponent
+            path="SalesManage/CustomerManage"
+            role={["admin"]}
+            title="顾客管理"
+          />
         ),
         meta: {
           title: "顾客管理",
@@ -56,7 +60,9 @@ export const siderRoutes: RouteObject[] = [
       },
       {
         path: "productManage",
-        element: <RouteComponent path="SalesManage/ProductManage" />,
+        element: (
+          <RouteComponent path="SalesManage/ProductManage" title="产品管理" />
+        ),
         meta: {
           title: "产品管理"
         }
