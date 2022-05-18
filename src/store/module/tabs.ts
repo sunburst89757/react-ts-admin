@@ -21,18 +21,19 @@ const initialState: tabsState = {
 };
 const selectMenuActive = (key: string): string[] => {
   const arr: any[] = key.split("/");
+  if (arr.length === 3) {
+    arr.shift();
+  }
   arr.shift();
   return arr;
+};
+const IsNewTabInTabs = (tabs: tabObject[], newTab: tabObject) => {
+  return tabs.some((tab) => tab.key === newTab.key);
 };
 const tabSlice = createSlice({
   name: "tabs",
   initialState,
   reducers: {
-    addTab: (state, action: PayloadAction<tabObject>) => {
-      state.tabs.push(action.payload);
-      state.activeTab = action.payload.key;
-      state.menuActive = selectMenuActive(action.payload.key);
-    },
     removeTab: (state, action: PayloadAction<string>) => {
       const index = state.tabs.findIndex((tab) => tab.key === action.payload);
       // console.log(index);
@@ -58,6 +59,18 @@ const tabSlice = createSlice({
         state.menuActive = selectMenuActive(state.tabs[index - 1].key);
       }
     },
+    changeTab: (state, action: PayloadAction<tabObject>) => {
+      if (IsNewTabInTabs(state.tabs, action.payload)) {
+        // 说明点的菜单是tab里有的直接修改tabActive
+        state.activeTab = action.payload.key;
+        state.menuActive = selectMenuActive(action.payload.key);
+      } else {
+        // 新增tab
+        state.tabs.push(action.payload);
+        state.activeTab = action.payload.key;
+        state.menuActive = selectMenuActive(action.payload.key);
+      }
+    },
     changeTabActive: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
       state.menuActive = selectMenuActive(action.payload);
@@ -73,5 +86,5 @@ const tabSlice = createSlice({
 });
 
 export const tabsReducer = tabSlice.reducer;
-export const { addTab, removeTab, changeTabActive, resetInitialState } =
+export const { removeTab, resetInitialState, changeTab, changeTabActive } =
   tabSlice.actions;

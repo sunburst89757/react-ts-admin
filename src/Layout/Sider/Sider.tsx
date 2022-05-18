@@ -4,6 +4,7 @@ import { AppstoreOutlined } from "@ant-design/icons";
 import { RouteObject, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/types";
 import { siderRoutes } from "../../router/config";
+import { useState } from "react";
 type MenuItem = Required<MenuProps>["items"][number];
 // antd根据配置生成的菜单项
 function getItem(
@@ -81,6 +82,10 @@ function generateAccessRoutes(role: string, routes: RouteObject[]): void {
   }
 }
 export function MySider({ isCollapse }: { isCollapse: boolean }) {
+  const [openKeys, setOpenKeys] = useState(["customerManage"]);
+  const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
+    console.log("keys", keys);
+  };
   const navigate = useNavigate();
   const role = useAppSelector((state) => state.user.userInfo.role);
   const menuActive = useAppSelector((state) => state.tabs.menuActive);
@@ -108,6 +113,8 @@ export function MySider({ isCollapse }: { isCollapse: boolean }) {
         defaultSelectedKeys={["dashboard"]}
         selectedKeys={menuActive}
         mode="inline"
+        // openKeys={openKeys}
+        // onOpenChange={onOpenChange}
         items={generateMenuItem(routes)}
         theme="dark"
       />
