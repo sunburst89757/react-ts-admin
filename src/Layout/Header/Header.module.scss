@@ -1,4 +1,33 @@
+h2,
+h4 {
+  margin: 0;
+  color: #fff;
+}
 .container {
-  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-left: 25px;
+
+  color: #fff;
+  .leftBlock {
+    display: flex;
+    align-items: center;
+    .icon {
+      font-weight: 700;
+      font-size: 20px;
+      margin-right: 30px;
+    }
+  }
+  .rightBlock {
+    display: flex;
+    align-items: center;
+    .informBox {
+      width: 164px;
+    }
+    .userInfo {
+      margin-left: 30px;
+      color: #fff;
+    }
+  }
 }

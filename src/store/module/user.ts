@@ -67,6 +67,7 @@ const userSlice = createSlice({
       state.userInfo.userId = action.payload.userId;
       // 用户角色本来应该从action.payload里传递，新项目需要接口更改
       state.userInfo.role = "super-admin";
+      state.userInfo.username = action.payload.nickName;
       cache.setItem("token", token);
     },
     "user/loginAction/rejected": (
