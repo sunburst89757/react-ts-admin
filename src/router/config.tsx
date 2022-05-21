@@ -1,4 +1,5 @@
 import { RouteObject } from "react-router-dom";
+import KeepAlive from "react-activation";
 import MyLayout from "../Layout";
 import { Login } from "../pages/Login";
 import {
@@ -15,6 +16,7 @@ import {
   用户的role是super-admin的拥有全部路由的访问权限
   meta.role = ["admin","editor"]：表明admin editor super-admin拥有这三个菜单的访问权限
   meta.role配置的是菜单显示的路由，系统的权限路由依靠是element属性组件上传递的role来控制
+  缓存组件只用于菜单的侧边栏组件，并且name只能是路由构成
   */
 export const siderRoutes: RouteObject[] = [
   {
@@ -47,11 +49,13 @@ export const siderRoutes: RouteObject[] = [
         path: "customerManage",
         element: (
           // 只有admin和super-admin才可以访问这个页面
-          <RouteComponent
-            path="SalesManage/CustomerManage"
-            role={["admin"]}
-            title="顾客管理"
-          />
+          <KeepAlive name="/salesManage/customerManage">
+            <RouteComponent
+              path="SalesManage/CustomerManage"
+              role={["admin"]}
+              title="顾客管理"
+            />
+          </KeepAlive>
         ),
         meta: {
           title: "顾客管理",

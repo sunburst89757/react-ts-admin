@@ -5,6 +5,7 @@ import { userType } from "./types";
 import { loginAction } from "../../store/module/user";
 import { useAppDispatch } from "../../store/types";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 export function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -20,6 +21,9 @@ export function Login() {
       })
     );
   };
+  useEffect(() => {
+    document.title = "登录";
+  });
   const onFinishFailed = () => {};
   const [form] = Form.useForm<userType>();
   return (
