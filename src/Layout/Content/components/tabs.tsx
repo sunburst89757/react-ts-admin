@@ -19,11 +19,10 @@ export function MyTabs() {
   const location = useLocation();
   const tabs = useAppSelector((state) => state.tabs.tabs);
   const tabActive = useAppSelector((state) => state.tabs.activeTab);
-  const { drop, clear, getCachingNodes } = useAliveController();
+  const { drop, getCachingNodes } = useAliveController();
   const onTabClick = (activeKey: string) => {
     const nodes = getCachingNodes();
     console.log("打印所有缓存节点", nodes);
-
     dispatch(changeTabActive(activeKey));
     navigate(activeKey);
   };
@@ -38,6 +37,7 @@ export function MyTabs() {
   useUpdateEffect(() => {
     navigate(tabActive);
   }, [tabActive]);
+  // 注释掉这个useEffect可以解决直接关闭页面，等token过期后访问这个页面报错
   useEffect(() => {
     const matchRoute = matchRoutes(siderRoutes, location.pathname)!;
     const newTab: tabObject = {
