@@ -35,7 +35,7 @@ export function MyHeader({ isCollapse, onClick }: propType) {
   const onClickDrop = (menuInfo: any) => {
     const { key } = menuInfo;
     if (key === "0") {
-      console.log(0);
+      console.log("修改密码逻辑");
     } else {
       handleLogout();
     }

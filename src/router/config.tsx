@@ -15,6 +15,7 @@ import {
   用户的role是super-admin的拥有全部路由的访问权限
   meta.role = ["admin","editor"]：表明admin editor super-admin拥有这三个菜单的访问权限
   meta.role配置的是菜单显示的路由，系统的权限路由依靠是element属性组件上传递的role来控制
+  RouteComponent不配置role表明这个路由不是权限路由
   */
 export const siderRoutes: RouteObject[] = [
   {
