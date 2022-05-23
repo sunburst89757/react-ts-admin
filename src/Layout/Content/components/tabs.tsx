@@ -44,8 +44,14 @@ export function MyTabs() {
       key: matchRoute[matchRoute.length - 1].pathname,
       title: matchRoute[matchRoute.length - 1].route.meta!.title
     };
-    dispatch(changeTab(newTab));
-  }, [location.pathname, dispatch]);
+    // 解决直接关闭页面后，重新打开页面，生成一个/路径 ----对应的tab
+    if (newTab.title === "重进页面") {
+      // 有redux的数据持久化，因此直接找到离开前激活的页面进行跳转即可
+      navigate(tabActive);
+    } else {
+      dispatch(changeTab(newTab));
+    }
+  }, [location.pathname, dispatch, navigate]);
   return (
     <Tabs
       type="editable-card"

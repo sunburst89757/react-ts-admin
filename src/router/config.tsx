@@ -25,6 +25,9 @@ export const siderRoutes: RouteObject[] = [
         <MyLayout></MyLayout>
       </AuthComponent>
     ),
+    meta: {
+      title: "重进页面"
+    },
     children: [
       {
         index: true,
