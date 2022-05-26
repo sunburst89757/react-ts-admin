@@ -1,13 +1,8 @@
 import "./App.scss";
-import { AliveScope } from "react-activation";
 import { MyRoutes } from "./router";
 
 function App() {
-  return (
-    <AliveScope>
-      <MyRoutes></MyRoutes>
-    </AliveScope>
-  );
+  return <MyRoutes></MyRoutes>;
 }
 
 export default App;

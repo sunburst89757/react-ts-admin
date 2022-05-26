@@ -10,7 +10,6 @@ import {
 } from "../../../store/module/tabs";
 import { useAppDispatch, useAppSelector } from "../../../store/types";
 import { useEffect } from "react";
-import { useAliveController } from "react-activation";
 const { TabPane } = Tabs;
 // 判断新生成的tab是否在已有的tabs内部
 export function MyTabs() {
@@ -19,16 +18,11 @@ export function MyTabs() {
   const location = useLocation();
   const tabs = useAppSelector((state) => state.tabs.tabs);
   const tabActive = useAppSelector((state) => state.tabs.activeTab);
-  const { drop, getCachingNodes } = useAliveController();
   const onTabClick = (activeKey: string) => {
-    const nodes = getCachingNodes();
-    console.log("打印所有缓存节点", nodes);
     dispatch(changeTabActive(activeKey));
     navigate(activeKey);
   };
   const onDelete = (targetKey: any, action: any) => {
-    // 卸载缓存组件
-    drop(targetKey);
     console.log(targetKey);
     dispatch(removeTab(targetKey));
     // tabActive有问题，dispatch更新后的最新的tabActive并不能在这里使用navigate跳转

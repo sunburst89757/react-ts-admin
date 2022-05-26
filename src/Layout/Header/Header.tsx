@@ -6,7 +6,6 @@ import { useResetState } from "../../hooks/useResettState";
 import { cache } from "../../utils/localStorage";
 import style from "./Header.module.scss";
 import { useAppSelector } from "../../store/types";
-import { useAliveController } from "react-activation";
 type propType = {
   isCollapse: Boolean;
   onClick: () => void;
@@ -16,10 +15,7 @@ export function MyHeader({ isCollapse, onClick }: propType) {
   const navigate = useNavigate();
   const username = useAppSelector((state) => state.user.userInfo.username);
   const reset = useResetState();
-  const { clear } = useAliveController();
   const handleLogout = () => {
-    // 清空所有tab里的缓存
-    clear();
     logout().then(
       (res) => {
         cache.clear();
