@@ -7,7 +7,7 @@ interface MetaObj {
 }
 declare module "react-router-dom" {
   export interface RouteObject {
-    meta?: MetaObj;
+    meta: MetaObj;
     children?: RouteObject[];
   }
 }

@@ -1,8 +1,8 @@
 import { useRoutes } from "react-router-dom";
-import { myRoutes } from "./config";
+import { myRouter } from "./config";
 
 export function MyRoutes() {
-  const routes = useRoutes(myRoutes);
+  const routes = useRoutes(myRouter);
 
   return <div style={{ height: "100vh" }}>{routes}</div>;
 }
