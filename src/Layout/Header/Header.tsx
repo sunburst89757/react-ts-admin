@@ -6,6 +6,7 @@ import { useResetState } from "../../hooks/useResettState";
 import { cache } from "../../utils/localStorage";
 import style from "./Header.module.scss";
 import { useAppSelector } from "../../store/types";
+import { useCallback, useRef } from "react";
 type propType = {
   isCollapse: Boolean;
   onClick: () => void;
@@ -15,7 +16,7 @@ export function MyHeader({ isCollapse, onClick }: propType) {
   const navigate = useNavigate();
   const username = useAppSelector((state) => state.user.userInfo.username);
   const reset = useResetState();
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout().then(
       (res) => {
         cache.clear();
@@ -27,17 +28,20 @@ export function MyHeader({ isCollapse, onClick }: propType) {
         console.log(err);
       }
     );
-  };
-  const onClickDrop = (menuInfo: any) => {
-    const { key } = menuInfo;
-    if (key === "0") {
-      console.log("修改密码逻辑");
-    } else {
-      handleLogout();
-    }
-  };
+  }, [navigate, reset]);
+  const onClickDrop = useCallback(
+    (menuInfo: any) => {
+      const { key } = menuInfo;
+      if (key === "0") {
+        console.log("修改密码逻辑");
+      } else {
+        handleLogout();
+      }
+    },
+    [handleLogout]
+  );
 
-  const menu = (
+  const menu = useRef(
     <Menu
       onClick={onClickDrop}
       items={[
@@ -74,7 +78,7 @@ export function MyHeader({ isCollapse, onClick }: propType) {
             通知详情
           </Button>
         </div>
-        <Dropdown overlay={menu} trigger={["click"]} arrow>
+        <Dropdown overlay={menu.current} trigger={["click"]} arrow>
           <a onClick={(e) => e.preventDefault()}>
             <Space className={style.userInfo}>{username}</Space>
           </a>

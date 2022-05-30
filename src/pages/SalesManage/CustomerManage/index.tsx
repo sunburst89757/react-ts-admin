@@ -1,14 +1,15 @@
 import { Button, Form, Input } from "antd";
 import { SearchOutlined, RedoOutlined } from "@ant-design/icons";
 import style from "./index.module.scss";
+import { useCallback } from "react";
 export default function CustomerManage() {
   const [form] = Form.useForm();
-  const onReset = () => {
+  const onReset = useCallback(() => {
     form.resetFields();
-  };
-  const onFinish = (values: any) => {
+  }, [form]);
+  const onFinish = useCallback((values: any) => {
     console.log(values, "触发");
-  };
+  }, []);
   return (
     <div className={style.container}>
       <Form

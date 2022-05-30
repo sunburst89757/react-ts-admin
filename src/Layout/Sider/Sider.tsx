@@ -4,7 +4,8 @@ import { AppstoreOutlined } from "@ant-design/icons";
 import { RouteObject, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/types";
 import { siderRoutes } from "../../router/config";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { MenuInfo } from "rc-menu/lib/interface";
 type MenuItem = Required<MenuProps>["items"][number];
 // antd根据配置生成的菜单项
 function getItem(
@@ -90,40 +91,56 @@ function generateRootSubmenuKeys(routes: RouteObject[]): string[] {
   return res;
 }
 export function MySider({ isCollapse }: { isCollapse: boolean }) {
+  console.log("xuanran");
+
   const { Sider } = Layout;
   const location = useLocation();
   const navigate = useNavigate();
   const [openKeys, setOpenKeys] = useState<any[]>([]);
   const role = useAppSelector((state) => state.user.userInfo.role);
   const menuActive = useAppSelector((state) => state.tabs.menuActive);
-  // 生成该用户可以访问的路由
-  const routes: RouteObject[] = _.cloneDeep(siderRoutes);
-  generateAccessRoutes(role, routes);
-  const rootSubmenuKeys = generateRootSubmenuKeys(routes);
+  // 深克隆一下避免影响siderRoutes
+  const routes: RouteObject[] = useMemo(() => _.cloneDeep(siderRoutes), []);
+  // console.log("重新渲染");
+  const rootSubmenuKeys = useMemo(
+    () => generateRootSubmenuKeys(routes),
+    [routes]
+  );
   // 多级菜单点击箭头展开的回调
-  const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
-    console.log("查看keys", keys);
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
+  const onOpenChange: MenuProps["onOpenChange"] = useCallback(
+    (keys: string[]) => {
+      console.log("查看keys", keys);
+      const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+      if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+        setOpenKeys(keys);
+      } else {
+        setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+      }
+    },
+    [openKeys, rootSubmenuKeys]
+  );
   // 点击菜单项
-  const onClick: MenuProps["onClick"] = (e) => {
-    // keypath数组控制菜单选中谁
-    console.log(e, "candan");
-    let path = e.keyPath.reverse().join("/");
-    path === "dashboard" ? (path = "/dashboard") : (path = path);
-    // abc这个是跳转外链的，不需要生成tab
-    if (path !== "/abc") {
-      navigate(path);
-    } else {
-      // 外链跳转不可以使用navigate
-      window.location.href = "https://github.com/sunburst89757/react-ts-admin";
-    }
-  };
+  const onClick: MenuProps["onClick"] = useCallback(
+    (e: MenuInfo) => {
+      // keypath数组控制菜单选中谁
+      console.log(e, "candan");
+      let path = e.keyPath.reverse().join("/");
+      path === "dashboard" ? (path = "/dashboard") : (path = path);
+      // abc这个是跳转外链的，不需要生成tab
+      if (path !== "/abc") {
+        navigate(path);
+      } else {
+        // 外链跳转不可以使用navigate
+        window.location.href =
+          "https://github.com/sunburst89757/react-ts-admin";
+      }
+    },
+    [navigate]
+  );
+  // 根据角色和侧边路由生成可以访问的路由
+  useEffect(() => {
+    generateAccessRoutes(role, routes);
+  }, [role, routes]);
   // 路由跳转引起的菜单展开选中效果显示
   useEffect(() => {
     setOpenKeys(["/" + location.pathname.split("/")[1]!]);

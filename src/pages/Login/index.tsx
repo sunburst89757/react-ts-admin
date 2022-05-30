@@ -5,26 +5,26 @@ import { userType } from "./types";
 import { loginAction } from "../../store/module/user";
 import { useAppDispatch } from "../../store/types";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 export function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const userInfo = useSelector(selectUser);
-  // const userInfo = useAppSelector((state) => state.user.userInfo);
-  const onFinish = (val: any) => {
-    // 表单验证通过
-    dispatch(
-      loginAction({
-        username: val.username,
-        password: val.password,
-        navigate
-      })
-    );
-  };
+  const onFinish = useCallback(
+    (val: any) => {
+      // 表单验证通过
+      dispatch(
+        loginAction({
+          username: val.username,
+          password: val.password,
+          navigate
+        })
+      );
+    },
+    [dispatch, navigate]
+  );
   useEffect(() => {
     document.title = "登录";
   });
-  const onFinishFailed = () => {};
   const [form] = Form.useForm<userType>();
   return (
     <div className={style.loginContainer}>
@@ -41,7 +41,6 @@ export function Login() {
             wrapperCol={{ span: 20 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <Form.Item

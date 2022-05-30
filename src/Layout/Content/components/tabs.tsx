@@ -9,7 +9,7 @@ import {
   tabObject
 } from "../../../store/module/tabs";
 import { useAppDispatch, useAppSelector } from "../../../store/types";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 const { TabPane } = Tabs;
 // 判断新生成的tab是否在已有的tabs内部
 export function MyTabs() {
@@ -18,15 +18,21 @@ export function MyTabs() {
   const location = useLocation();
   const tabs = useAppSelector((state) => state.tabs.tabs);
   const tabActive = useAppSelector((state) => state.tabs.activeTab);
-  const onTabClick = (activeKey: string) => {
-    dispatch(changeTabActive(activeKey));
-    navigate(activeKey);
-  };
-  const onDelete = (targetKey: any, action: any) => {
-    console.log(targetKey);
-    dispatch(removeTab(targetKey));
-    // tabActive有问题，dispatch更新后的最新的tabActive并不能在这里使用navigate跳转
-  };
+  const onTabClick = useCallback(
+    (activeKey: string) => {
+      dispatch(changeTabActive(activeKey));
+      navigate(activeKey);
+    },
+    [dispatch, navigate]
+  );
+  const onDelete = useCallback(
+    (targetKey: any, action: any) => {
+      console.log(targetKey);
+      dispatch(removeTab(targetKey));
+      // tabActive有问题，dispatch更新后的最新的tabActive并不能在这里使用navigate跳转
+    },
+    [dispatch]
+  );
   // 监视删除的时候使用
   useUpdateEffect(() => {
     navigate(tabActive);
@@ -39,7 +45,7 @@ export function MyTabs() {
       title: matchRoute[matchRoute.length - 1].route.meta!.title
     };
     // 解决直接关闭页面后，重新打开页面，生成一个/路径 ----对应的tab
-    if (newTab.title === "重进页面") {
+    if (newTab.title === "布局") {
       // 有redux的数据持久化，因此直接找到离开前激活的页面进行跳转即可
       navigate(tabActive);
     } else {
