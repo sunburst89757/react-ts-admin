@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import { RouteObject } from "react-router-dom";
 import { LazyLoad } from "../components/LazyLoad";
 import { Redirect } from "../components/Redirect";
@@ -94,7 +94,7 @@ export const siderRoutes: RouteObject[] = [
     }
   }
 ];
-export const myRoutes: RouteObject[] = [
+const myRoutes: RouteObject[] = [
   {
     path: "/login",
     element: <Login></Login>,
@@ -139,7 +139,7 @@ const generateRouter = (routes: RouteObject[]) => {
 const RouterBeforeEach = ({ children, role, title }: interceptOBj) => {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   // 验证是否登录（刷新）
-  const authLogin = () => {
+  const authLogin = useMemo(() => {
     const token = cache.getItem("token");
     if (!token) {
       return false;
@@ -151,22 +151,21 @@ const RouterBeforeEach = ({ children, role, title }: interceptOBj) => {
     }
     // 不用考虑刷新，因为role已经数据持久化了刷新不会丢失
     return true;
-  };
+  }, []);
   // 验证权限路由
-  const authRoute = () => {
+  const authRoute = useMemo(() => {
     if (!role || userInfo.role === "super-admin") {
       return true;
-    } else {
-      return role.includes(userInfo.role);
     }
-  };
+    return role.includes(userInfo.role);
+  }, [role, userInfo.role]);
   useEffect(() => {
     document.title = title;
   });
   return (
     <div>
-      {authLogin() ? (
-        authRoute() ? (
+      {authLogin ? (
+        authRoute ? (
           children
         ) : (
           <Redirect to="/404"></Redirect>
