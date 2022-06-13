@@ -73,7 +73,7 @@ export const siderRoutes: RouteObject[] = [
         path: "areaManage",
         element: <LazyLoad path="PurchaseManage/AreaManage"></LazyLoad>,
         meta: {
-          title: " 区域管理"
+          title: "区域管理"
         }
       },
       {
@@ -99,7 +99,7 @@ const myRoutes: RouteObject[] = [
     path: "/login",
     element: <Login></Login>,
     meta: {
-      title: "登录界面"
+      title: "登录"
     }
   },
   {
@@ -118,6 +118,17 @@ const myRoutes: RouteObject[] = [
   },
   ...siderRoutes
 ];
+// 一级路由不需要鉴权
+const isInterceptRoute = (route: RouteObject): boolean => {
+  if (
+    route.children ||
+    route.meta.title === "登录" ||
+    route.meta.title === "404"
+  ) {
+    return false;
+  }
+  return true;
+};
 // 根据路由配置生成react router dom需要的路由结构
 const generateRouter = (routes: RouteObject[]) => {
   return routes.map((route) => {
@@ -125,7 +136,7 @@ const generateRouter = (routes: RouteObject[]) => {
       route.children = generateRouter(route.children);
     }
     // 路由拦截器 登录和授权页面不需要鉴权
-    if (route.path !== "/login" && route.path !== "/404") {
+    if (isInterceptRoute(route)) {
       route.element = (
         <RouterBeforeEach role={route.meta.role} title={route.meta.title}>
           {route.element}
