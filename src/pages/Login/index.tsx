@@ -2,30 +2,38 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import style from "./Login.module.scss";
 import { userType } from "./types";
-import { loginAction } from "../../store/module/user";
+import { updateUserInfo } from "../../store/module/user";
 import { useAppDispatch } from "../../store/types";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect } from "react";
+import { useRequest } from "ahooks";
+import { login } from "../../api/user";
 export function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const onFinish = useCallback(
-    (val: any) => {
-      // 表单验证通过
-      dispatch(
-        loginAction({
-          username: val.username,
-          password: val.password,
-          navigate
-        })
-      );
+  const { run: handleLogin } = useRequest((params: userType) => login(params), {
+    manual: true,
+    onSuccess: (res) => {
+      if (res.success) {
+        dispatch(updateUserInfo(res.data));
+        navigate("/dashboard");
+      }
     },
-    [dispatch, navigate]
+    onError: (error) => {
+      console.log(error, "错误信息");
+    }
+  });
+  // 验证通过后登录
+  const onFinish = useCallback(
+    (val: userType) => {
+      handleLogin(val);
+    },
+    [handleLogin]
   );
+  const [form] = Form.useForm<userType>();
   useEffect(() => {
     document.title = "登录";
   });
-  const [form] = Form.useForm<userType>();
   return (
     <div className={style.loginContainer}>
       <div className={style.title}></div>

@@ -1,13 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NavigateFunction } from "react-router-dom";
-import { login, requestParams } from "../../api/user";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { Res } from "../../api/user";
-import { stateType, userInfo } from "../types";
+import { stateType } from "../types";
 import { cache } from "../../utils/localStorage";
-interface IloginType extends requestParams {
-  navigate: NavigateFunction;
-}
 const initialState: stateType = {
   userInfo: {
     userId: 0,
@@ -18,27 +13,18 @@ const initialState: stateType = {
   isShowReloginModal: false,
   datedNum: 0
 };
-export const loginAction = createAsyncThunk(
-  "user/loginAction",
-  async (payload: IloginType) => {
-    const { username, password, navigate } = payload;
-    const res = await login({
-      username,
-      password
-    });
-    navigate("/dashboard");
-    return res.data;
-  }
-);
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUserInfo: (state, action: PayloadAction<userInfo>) => {
-      const { userId, role, username } = action.payload;
-      state.userInfo.role = role;
+    updateUserInfo: (state, action: PayloadAction<Res>) => {
+      const { token, userId, nickName } = action.payload;
+      state.token = token;
       state.userInfo.userId = userId;
-      state.userInfo.username = username;
+      // 用户角色本来应该从action.payload里传递，新项目需要接口更改
+      state.userInfo.role = "super-admin";
+      state.userInfo.username = nickName;
+      cache.setItem("token", token);
     },
     changeisShowReloginModal: (state) => {
       state.isShowReloginModal = !state.isShowReloginModal;
@@ -55,26 +41,6 @@ const userSlice = createSlice({
       state.datedNum = datedNum;
       state.isShowReloginModal = isShowReloginModal;
       state.token = token;
-    }
-  },
-  extraReducers: {
-    "user/loginAction/fulfilled": (
-      state: stateType,
-      action: PayloadAction<Res>
-    ) => {
-      const { token } = action.payload;
-      state.token = token;
-      state.userInfo.userId = action.payload.userId;
-      // 用户角色本来应该从action.payload里传递，新项目需要接口更改
-      state.userInfo.role = "super-admin";
-      state.userInfo.username = action.payload.nickName;
-      cache.setItem("token", token);
-    },
-    "user/loginAction/rejected": (
-      state: stateType,
-      action: PayloadAction<any>
-    ) => {
-      console.log("登录失败");
     }
   }
 });

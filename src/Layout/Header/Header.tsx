@@ -7,6 +7,7 @@ import { cache } from "../../utils/localStorage";
 import style from "./Header.module.scss";
 import { useAppSelector } from "../../store/types";
 import { useCallback, useRef } from "react";
+import { useRequest } from "ahooks";
 type propType = {
   isCollapse: Boolean;
   onClick: () => void;
@@ -15,20 +16,19 @@ export function MyHeader({ isCollapse, onClick }: propType) {
   const { Header } = Layout;
   const navigate = useNavigate();
   const username = useAppSelector((state) => state.user.userInfo.username);
+  const { run: handleLogout } = useRequest(logout, {
+    manual: true,
+    onSuccess: () => {
+      cache.clear();
+      navigate("/login");
+      // 重置redux状态
+      reset();
+    },
+    onError: (err) => {
+      console.log(err);
+    }
+  });
   const reset = useResetState();
-  const handleLogout = useCallback(() => {
-    logout().then(
-      (res) => {
-        cache.clear();
-        navigate("/login");
-        // 重置redux状态
-        reset();
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }, [navigate, reset]);
   const onClickDrop = useCallback(
     (menuInfo: any) => {
       const { key } = menuInfo;
