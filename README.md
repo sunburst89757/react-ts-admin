@@ -33,6 +33,10 @@
   ```
   npm run start
   ```
+  - 登录使用
+  ```
+  test: 123456
+  ```
 - 打包上线
   ```
   npm run build
