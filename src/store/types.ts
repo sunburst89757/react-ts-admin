@@ -14,4 +14,5 @@ export interface stateType {
   token: string;
   isShowReloginModal: boolean;
   datedNum: number;
+  loading: boolean;
 }

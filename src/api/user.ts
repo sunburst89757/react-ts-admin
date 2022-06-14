@@ -22,3 +22,10 @@ export function logout() {
     method: "post"
   });
 }
+
+export function getAreaList() {
+  return myRequest({
+    url: "/area/list",
+    method: "get"
+  });
+}

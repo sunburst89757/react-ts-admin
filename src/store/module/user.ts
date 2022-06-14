@@ -11,7 +11,8 @@ const initialState: stateType = {
   },
   token: "",
   isShowReloginModal: false,
-  datedNum: 0
+  datedNum: 0,
+  loading: false
 };
 const userSlice = createSlice({
   name: "user",
@@ -41,6 +42,9 @@ const userSlice = createSlice({
       state.datedNum = datedNum;
       state.isShowReloginModal = isShowReloginModal;
       state.token = token;
+    },
+    setLoading: (state, action: PayloadAction<{ loading: boolean }>) => {
+      state.loading = action.payload.loading;
     }
   }
 });
@@ -52,7 +56,8 @@ export const {
   changeisShowReloginModal,
   incrementDatedNum,
   resetDatedNum,
-  resetInitialState
+  resetInitialState,
+  setLoading
 } = userSlice.actions;
 // 导出reducer
 export const userReducer = userSlice.reducer;

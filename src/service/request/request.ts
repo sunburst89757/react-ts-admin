@@ -4,7 +4,8 @@ import { RequestConfig } from "../types";
 import { store } from "../../store";
 import {
   changeisShowReloginModal,
-  incrementDatedNum
+  incrementDatedNum,
+  setLoading
 } from "../../store/module/user";
 export class MyRequest {
   service: AxiosInstance;
@@ -14,6 +15,7 @@ export class MyRequest {
       (config: AxiosRequestConfig) => {
         // console.log("所有实例都请求拦截成功");
         const token = cache.getItem("token");
+        store.dispatch(setLoading({ loading: true }));
         if (token) {
           config.headers!.Authorization = token;
         }
@@ -32,6 +34,7 @@ export class MyRequest {
     this.service.interceptors.response.use(
       (res: AxiosResponse) => {
         // console.log(res, "公共响应拦截成功");
+        store.dispatch(setLoading({ loading: false }));
         if (res.data.code === 401) {
           store.dispatch(incrementDatedNum());
           if (store.getState().user.datedNum === 1) {
