@@ -17,12 +17,6 @@ export default function Dashboard() {
     },
     onError: (err) => {
       console.log(err);
-    },
-    onBefore: () => {
-      console.log("hhhhh");
-    },
-    onFinally: () => {
-      console.log(111);
     }
   });
 
