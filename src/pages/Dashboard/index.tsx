@@ -19,7 +19,7 @@ export default function Dashboard() {
       console.log(err);
     }
   });
-
+  console.log("重新绘制");
   return (
     <div>
       <Button onClick={handleNavigate}>测试路由权限</Button>

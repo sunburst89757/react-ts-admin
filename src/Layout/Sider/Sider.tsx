@@ -91,8 +91,6 @@ function generateRootSubmenuKeys(routes: RouteObject[]): string[] {
   return res;
 }
 export function MySider({ isCollapse }: { isCollapse: boolean }) {
-  console.log("xuanran");
-
   const { Sider } = Layout;
   const location = useLocation();
   const navigate = useNavigate();
@@ -101,7 +99,6 @@ export function MySider({ isCollapse }: { isCollapse: boolean }) {
   const menuActive = useAppSelector((state) => state.tabs.menuActive);
   // 深克隆一下避免影响siderRoutes
   const routes: RouteObject[] = useMemo(() => _.cloneDeep(siderRoutes), []);
-  // console.log("重新渲染");
   const rootSubmenuKeys = useMemo(
     () => generateRootSubmenuKeys(routes),
     [routes]
