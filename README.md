@@ -1,6 +1,7 @@
 # react-ts-admin
 
 这是一个利用 react18 + typescript 实现的 Web 后台管理系统模板
+基于此开发了一个[博客后台管理系统](https://github.com/sunburst89757/clock-admin)
 
 ## 特性
 
