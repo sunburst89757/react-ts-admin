@@ -6,20 +6,20 @@ export interface requestParams {
 }
 export interface Res {
   token: string;
-  nickName: string;
+  username: string;
   userId: number;
 }
 export function login(params: requestParams) {
   return myRequest<requestParams, Res>({
-    url: "/login/login",
+    url: "/user/login",
     params,
     method: "post"
   });
 }
 export function logout() {
   return myRequest({
-    url: "/login/logout",
-    method: "post"
+    url: "/user/logout",
+    method: "get"
   });
 }
 
