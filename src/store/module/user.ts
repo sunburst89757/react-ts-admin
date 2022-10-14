@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { Res } from "../../api/user";
-import { stateType } from "../types";
 import { cache } from "../../utils/localStorage";
+import { stateType } from "../types";
 const initialState: stateType = {
   userInfo: {
     userId: 0,
@@ -11,8 +11,7 @@ const initialState: stateType = {
   },
   token: "",
   isShowReloginModal: false,
-  datedNum: 0,
-  loading: false
+  datedNum: 0
 };
 const userSlice = createSlice({
   name: "user",
@@ -42,9 +41,6 @@ const userSlice = createSlice({
       state.datedNum = datedNum;
       state.isShowReloginModal = isShowReloginModal;
       state.token = token;
-    },
-    setLoading: (state, action: PayloadAction<{ loading: boolean }>) => {
-      state.loading = action.payload.loading;
     }
   }
 });
@@ -56,8 +52,7 @@ export const {
   changeisShowReloginModal,
   incrementDatedNum,
   resetDatedNum,
-  resetInitialState,
-  setLoading
+  resetInitialState
 } = userSlice.actions;
 // 导出reducer
 export const userReducer = userSlice.reducer;
